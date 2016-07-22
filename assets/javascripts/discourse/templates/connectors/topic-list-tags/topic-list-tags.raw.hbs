@@ -1,3 +1,11 @@
+{{#if context.showThumbnail}}
+  <div class="topic-thumbnail">
+    <a href="{{context.topic.url}}">
+      {{blog-category-unbound context.topic.thumbnails}}
+    </a>
+  </div>
+{{/if}}
+
 {{#unless expandPinned}}
   {{#if context.isBlogItem}}
     {{raw "list/topic-excerpt" topic=context.topic}}

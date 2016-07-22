@@ -1,3 +1,15 @@
+.topic-thumbnail {
+  float: left;
+  padding-right: 15px;
+  .thumbnail {
+    height: 100px;
+    width: 100px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}
+
 .category-blog .topic-list{
   .posters, .posts, .views {
     display: none;

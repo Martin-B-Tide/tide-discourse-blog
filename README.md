@@ -4,9 +4,10 @@ Special case settings for `blog` category.
 
 ## Features
 
-1. Excerpts for all topics
+1. 400 char length excerpts for all topics
 2. Topics ordered by `created`
 3. `user`, `replies`, and `views` hidden
+4. Square thumbnails from primary post image
 
 ![Blog Category Preview](./preview.png)
 
@@ -21,9 +22,9 @@ To install using docker, add the following to your `app.yml` in the plugins sect
     hooks:
       after_code:
         - exec:
-          cmd:
-            - mkdir -p plugins
-            - git clone https://github.com/tideaccount/tide-discourse-blog.git
+            cd: $home/plugins
+            cmd:
+              - git clone https://github.com/tideaccount/tide-discourse-blog.git
 
 and rebuild your docker via
 
