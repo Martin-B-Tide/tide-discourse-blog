@@ -5,7 +5,7 @@ import TopicListItem from 'discourse/components/topic-list-item'
 
 var renderUnboundPreview = function(thumbnails) {
   var previewUrl = window.devicePixelRatio >= 2 ? thumbnails.retina : thumbnails.normal
-  return '<div class="thumbnail" style=\'background-image: url("' + previewUrl + '")\'></div>'
+  return `<img class="thumbnail" src="${previewUrl}" onerror="this.onerror=null;this.src='';this.className='no-thumbnail';">`
 }
 
 export default {

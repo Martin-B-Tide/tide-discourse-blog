@@ -34,6 +34,7 @@ after_initialize do
       def save_thumbnails(id, thumbnails)
         return unless thumbnails
         topic = Topic.find(id)
+        Rails.logger.info "Saving thumbnails: #{thumbnails}"
         topic.custom_fields['thumbnails'] = thumbnails
         topic.save_custom_fields
       end
@@ -45,6 +46,7 @@ after_initialize do
     def get_linked_image(url)
       max_size = SiteSetting.max_image_size_kb.kilobytes
       file = FileHelper.download(url, max_size, 'discourse', true)
+      Rails.logger.info "Downloaded linked image: #{file}"
       Upload.create_for(@post.user_id, file, file.path.split('/')[-1], File.size(file.path))
     rescue => e
       Rails.logger.error e
@@ -54,6 +56,7 @@ after_initialize do
     def create_topic_thumbnails(url)
       local = UrlHelper.is_local(url)
       image = local ? Upload.find_by(sha1: url[/[a-z0-9]{40,}/i]) : get_linked_image(url)
+      Rails.logger.info "Creating thumbnails with: #{image}"
       ListHelper.create_thumbnails(@post.topic.id, image, url)
     end
 
@@ -61,6 +64,7 @@ after_initialize do
     def update_topic_image
       if @post.is_first_post?
         img = extract_images_for_topic.first
+        Rails.logger.info "Updating topic image: #{img}"
         if img['src']
           url = img['src'][0...255]
           create_topic_thumbnails(url)
@@ -74,7 +78,7 @@ after_initialize do
   class ::ListableTopicSerializer
     alias original_excerpt excerpt
     def excerpt
-      if Category.select(:slug).find_by_id(category_id).slug == 'blog'
+      if category_id && Category.select(:slug).find_by_id(category_id).slug == 'blog'
         max_length = 400
         cooked = object.first_post.cooked
         excerpt = PrettyText.excerpt(cooked, max_length, keep_emoji_images: true)
@@ -96,6 +100,7 @@ after_initialize do
     end
 
     def include_thumbnails?
+      Rails.logger.debug "THUMBNAIL #{thumbnails}"
       thumbnails.present? && thumbnails['normal'].present?
     end
 
