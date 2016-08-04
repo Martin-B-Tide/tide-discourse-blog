@@ -78,7 +78,7 @@ after_initialize do
   class ::ListableTopicSerializer
     alias original_excerpt excerpt
     def excerpt
-      if defined?(category_id) && Category.select(:slug).find_by_id(category_id).slug == 'blog'
+      if defined?(category_id) && Category.select(:slug).find_by_id(category_id).try(:slug) == 'blog'
         max_length = 400
         cooked = object.first_post.cooked
         excerpt = PrettyText.excerpt(cooked, max_length, keep_emoji_images: true)
